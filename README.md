@@ -40,6 +40,25 @@ At Rivio I worked on a feature like this and we tested it by hand. That's how I 
 
 `prompts/v1.md` is the baseline. `prompts/v2.md` is a plausible "optimization": shorter, cheaper, "focus on the main agreement". The eval shows whether that change is safe to ship.
 
+## Results (first run)
+
+| | v1 (baseline) | v2 ("cheaper, focus on main agreement") |
+|---|---|---|
+| Correct classifications | 16/16 | 16/16 |
+| Read the amendment and cited it | yes | yes |
+| Judge pass rate | 100% | 93% |
+| Model cost | $0.096 | $0.077 |
+| Gate | ship | ship |
+
+What I learned:
+
+1. **The expected regression didn't happen.** v2 still read the amendment. The eval answered that instead of a guess.
+2. **The judge caught a quality drop code couldn't.** One v2 explanation named the vendor's terms but not the standard it was compared to.
+3. **The judge was too lenient.** Against my own grades on 8 v2 explanations it agreed 5/8 (62%, target 90%), and all 3 misses were false approvals: it credited comparisons the explanation never made, filling in the standard terms itself. So v2's 93% judge score isn't trustworthy yet. Next: a stricter rubric, re-checked on explanations I grade fresh.
+4. **A perfect baseline means the test set is too easy.** Next: harder cases (long contracts, conflicting amendments).
+
+Full outputs: `results/<variant>/run.json`. My grades: `results/v2/calibration.csv`.
+
 ## Run it
 
 ```bash
